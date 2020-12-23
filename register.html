@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="register.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="container">
+		<h1>Registrierung</h1>
+		<div class="cont_1">
+			<input type="text" name="name" placeholder="Name" onkeyup="Leange(this,3,check_name)">
+			<div id="check_name"></div>
+			<input type="text" name="vorname" placeholder="Vorname" onkeyup="Leange(this,2,check_vorname)">
+			<div id="check_vorname"></div>
+			<label for="Geburtstag">Geburtstag</label><input type="date" id="Geburtstag"  name="date" min="1920-01-01" onmouseleave="Date(this,check_geburtsdatum)">
+			<div id="check_geburtsdatum"></div>
+		</div>	
+
+		<div class="cont_2">
+			<input type="text"  name="adresse" placeholder="Adresse" onkeyup="adresse(this,check_adresse)">
+			<div id="check_adresse"></div>
+			<input type="text"  name="plz" placeholder="PLZ" onkeyup="plz(this,check_plz)">
+			<div id="check_plz"></div>
+		</div>
+		
+		<div class="cont_3">	
+			<input type="email" name="email" placeholder="Email" onkeyup="email(this,check_email)">
+			<div id="check_email"></div>
+			<input type="passwort" name="passwort" placeholder="Passwort" onkeyup="passwort(this,check_passwort)">
+			<div id="check_passwort"></div>
+		</div>
+
+		<div class="cont_4">
+			<a href="" onclick="speichern()">speichern</a>
+			<div id="check_all"></div>
+		</div>
+
+	</div>
+	<script>
+		class verarbeitung{
+
+			constructor(){
+
+			}
+
+			leange(element,Leange,error_Anzeige){
+				var check=true;
+				if(element.value.length<Leange){
+					check=false;
+					element.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace;'><small>Der Name muss mehr als 2 character enthalten</small></h6>";
+
+				}else{
+					element.style.border="2px solid green";
+					check=true;
+					error_Anzeige.innerHTML="";
+				}
+				return check ;
+
+			}
+
+			
+			geburtstag(geburtstag,error_Anzeige){
+				var check = true;
+				if(geburtstag.value!=""){
+					geburtstag.style.border="2px solid green";
+					error_Anzeige.innerHTML="";
+				}else{
+					geburtstag.style.border="2px solid red";
+					check=false;
+					error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace;'><small>Wählen Sie einen Wert</small></h6>";
+					
+				}
+
+				return check;
+
+			}
+			adresse(adresse,error_Anzeige){
+				var check= true;
+				if(adresse.value.search('str')<0){
+					check= false;
+				}else{
+					let index = adresse.value.indexOf('str');
+					let string1 = adresse.value.slice(index + adresse.value.length);
+					if(!isNaN(parseInt(string1))){
+						adresse.style.border="2px solid red";
+						error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace;'><small>Geben Sie eine gültige Adresse</small></h6>";
+					}else{
+						adresse.style.border="2px solid green";
+						error_Anzeige.innerHTML="";
+						
+						check=false;
+					}
+				
+				}
+				if (adresse.value=="") {
+					adresse.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace;'><small>Füllen Sie bitte dieses Feld</small></h6>";
+					}
+				return check;
+			}
+
+
+			plz(plz,error_Anzeige){
+				var check = true;
+				let val = plz.value.trim();
+				
+				if( val.length==5){
+					if(isNaN(parseInt(val))){
+						plz.style.border="2px solid red";
+						error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace;'><small>Geben Sie bitte eine gültige PLZ</small></h6>";
+						check=false;
+					}else{
+						plz.style.border="2px solid green";
+						error_Anzeige.innerText="";
+					    
+					}
+
+				}else{
+
+					plz.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace;'><small>Geben Sie bitte eine gültige PLZ</small></h6>";
+					check=false;
+				}
+				return check;
+
+			}
+			email(email,error_Anzeige){
+				var check = true;
+				var em =email.value;
+				if(em.indexOf('@')<0){
+					check=false;
+					email.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace;'><small>Geben Sie eine gültige Email</small></h6>";
+				}else{
+					email.style.border="2px solid green";
+					error_Anzeige.innerHTML="";
+				}
+
+
+			}
+			passwort(passwort,error_Anzeige){
+				let character_check = false;
+				let zahlen_check = false;
+				let zeichen = false;
+				let tab_zeichen = ['.',',','?',';',':','!',];
+				//Großbuchtaben Überprüfung
+				for (const wert of passwort.value) {
+					if(wert == wert.toUpperCase()){
+						character_check=true;
+						break;
+					}
+				}
+				// check auf Zahlen
+				for(const wert of passwort.value){
+						if(isNaN(wert)){
+							
+						}else{
+							zahlen_check=true;
+							break;
+						}
+				}
+				//check auf Zeichen
+				for(const wert of passwort.value){
+					for(const zeich of tab_zeichen){
+						if (wert==zeich){
+							zeichen= true;
+							break;
+						}
+					}
+				}
+
+
+				if(character_check==true && zeichen==true && zahlen_check == true && passwort.value.length>7) {
+					passwort.style.border="2px solid green";
+					error_Anzeige.innerHTML="";
+
+				}else{
+					passwort.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace'><small>das Passwort muss mindesten 8 Zeichen haben ,Großbuchtaben ,zeichen,und Zahlen enthalten</small></h6>";
+				}
+					
+
+			}
+
+			pruef_all(){
+
+			}
+				
+				
+				
+
+		}
+
+		//Variable für die Fehlerbehandlung	(Sie werden den Klassemethoden übergeben)	
+		var check_name = document.getElementById('check_name');
+		var check_vorname = document.getElementById('check_vorname');
+		var check_geburtsdatum = document.getElementById('check_geburtsdatum');
+		var check_adresse = document.getElementById('check_adresse');
+		var check_plz = document.getElementById('check_plz');
+		var check_email = document.getElementById('check_email');
+		var check_passwort = document.getElementById('check_passwort');
+
+
+		//für die angabenverarbeitung
+		var verarb= new verarbeitung();
+
+		// alle diese werden von den Komponenten aufgerufen(also input ...)
+		function Leange(element,Leange,error_Anzeige){
+		
+		verarb.leange(element,Leange,error_Anzeige);
+		}
+		function Date(element,error_Anzeige){
+			verarb.geburtstag(element,error_Anzeige);
+		}
+
+		function adresse(element,error_Anzeige){
+			verarb.adresse(element,error_Anzeige);
+		}
+		function plz(element,error_Anzeige){
+			verarb.plz(element,error_Anzeige);
+		}
+		function email(element,error_Anzeige){
+			verarb.email(element,error_Anzeige);
+		}
+
+		function passwort(element,error_Anzeige){
+			verarb.passwort(element,error_Anzeige);
+		}
+	</script>
+</body>
+</html>

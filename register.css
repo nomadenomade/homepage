@@ -1,0 +1,112 @@
+
+body{
+	background-image: url(programming.jpeg);
+	background-attachment: fixed;
+	background-size: cover;
+
+}
+.container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr 3fr 1fr;
+	height: 700px; 
+	background-color:black;
+	opacity: 0.8;
+	margin: 30px;
+
+
+
+}
+
+.container h1 {
+	grid-column: 1/4;
+	grid-row: 1/2;
+	text-align: center;
+	color:white;
+	font-family: monospace;
+}
+
+.cont_1{
+	grid-column: 1/2;
+	grid-row: 2/3;
+	text-align: center;
+	color: white;
+
+}
+.cont_2{
+	grid-column: 2/3;
+	grid-row: 2/3;
+	text-align: center;
+	color: white;
+}
+
+.cont_3{
+	grid-column: 3/4;
+	grid-row: 2/3;
+	text-align: center;
+	color:white;
+}
+.cont_4{
+	grid-column: 1/4;
+	grid-row: 3/4;
+	text-align: center;
+
+
+}
+
+.cont_1 input ,.cont_2 input, .cont_3 input{
+
+	background-color: transparent;
+	color: white;
+	border:1px solid white;
+	margin-top: 25px;
+	padding: 1.5vw;
+}
+.cont_4 a {
+	padding-left: 80px;
+	padding-right: 80px;
+	padding-top:20px;
+	padding-bottom:20px; 
+	text-decoration: none;
+	font-family: monospace;
+	color: white;
+	border:1px solid rgb(199,21,133);
+
+}
+.cont_4 a:hover{
+	background-color:rgb(199,21,133);
+}
+
+
+@media only screen and (max-width:850px){
+	.container{
+		display:grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: 1fr 2fr 2fr 2fr 1fr;
+		height: 1000px;
+	}
+
+	.container h1 {
+		grid-column: 1/2;
+		grid-row: 1/2;
+	}
+
+	.cont_1{
+		grid-column: 1/2;
+		grid-row: 2/3;
+	}
+	.cont_2{
+		grid-column: 1/2;
+		grid-row: 3/4;
+	}
+	.cont_3{
+		grid-column: 1/2;
+		grid-row: 4/5;
+	}
+	.cont_4{
+		grid-column: 1/2;
+		grid-row: 5/6;
+	}
+
+
+}
