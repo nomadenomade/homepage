@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="register.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+	<div class="container">
+		<h1>Registrierung</h1>
+		<div class="cont_1">
+			<input type="text" name="name" placeholder="Name" onkeyup="Leange(this,3,check_name)">
+			<div id="check_name"></div>
+			<input type="text" name="vorname" placeholder="Vorname" onkeyup="Leange(this,2,check_vorname)">
+			<div id="check_vorname"></div>
+			<label for="Geburtstag">Geburtstag</label><input type="date" id="Geburtstag"  name="date" min="1920-01-01" onmouseleave="Date(this,check_geburtsdatum)">
+			<div id="check_geburtsdatum"></div>
+		</div>	
+
+		<div class="cont_2">
+			<input type="text"  name="adresse" placeholder="Adresse" onkeyup="adresse(this,check_adresse)">
+			<div id="check_adresse"></div>
+			<input type="text"  name="plz" placeholder="PLZ" onkeyup="plz(this,check_plz)">
+			<div id="check_plz"></div>
+		</div>
+		
+		<div class="cont_3" id="cont_3">	
+			<input type="email" name="email" placeholder="Email" onkeyup="email(this,check_email)">
+			<div id="check_email"></div>
+			<input type="passwort" name="passwort" v-model="input_wert" v-on:keyup="check_input" placeholder="Passwort" onkeyup="passwort(this,check_passwort)">
+			<div id="check_passwort"></div>
+			<div id="grosse_buch"><h3 style='color:green;font-family:monospace;'>{{GB}}</h3></div>
+			<div id="zahlen"><h3 style='color:green;font-family:monospace;'>{{Zahl}}</h3></div>
+			<div id="zeichen"><h3 style='color:green;font-family:monospace;'>{{Zeichen}}</h3></div>
+			
+		</div>
+
+		<div class="cont_4">
+			<a href="" id="Submitt">speichern</a>
+			<div id="check_all" style="margin-top:15px;"></div>
+		</div>
+
+	</div>
+<script src="https://unpkg.com/vue"></script>
+	<script>
+		class verarbeitung{
+
+			constructor(){
+
+			}
+
+			leange(element,Leange,error_Anzeige){
+				var check=true;
+				if(element.value.length<Leange){
+					check=false;
+					element.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:orange;font-weight:monospace;'><small>Der Name muss mehr als 2 character enthalten</small></h6>";
+
+				}else{
+					element.style.border="2px solid green";
+					check=true;
+					error_Anzeige.innerHTML="";
+				}
+				return check ;
+
+			}
+
+			
+			geburtstag(geburtstag,error_Anzeige){
+				var check = true;
+				if(geburtstag.value!=""){
+					geburtstag.style.border="2px solid green";
+					error_Anzeige.innerHTML="";
+				}else{
+					geburtstag.style.border="2px solid red";
+					check=false;
+					error_Anzeige.innerHTML="<h6 style='color:orange;font-weight:monospace;'><small>Wählen Sie einen Wert</small></h6>";
+					
+				}
+
+				return check;
+
+			}
+			adresse(adresse,error_Anzeige){
+				var check= true;
+				if(adresse.value.search('str')<0){
+					check= false;
+				}else{
+					let index = adresse.value.indexOf('str');
+					let string1 = adresse.value.slice(index + adresse.value.length);
+					if(!isNaN(parseInt(string1))){
+						adresse.style.border="2px solid red";
+						error_Anzeige.innerHTML="<h6 style='color:orange;font-weight:monospace;'><small>Geben Sie eine gültige Adresse</small></h6>";
+					}else{
+						adresse.style.border="2px solid green";
+						error_Anzeige.innerHTML="";
+						
+						check=false;
+					}
+				
+				}
+				if (adresse.value=="") {
+					adresse.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:orange;font-weight:monospace;'><small>Füllen Sie bitte dieses Feld</small></h6>";
+					}
+				return check;
+			}
+
+
+			plz(plz,error_Anzeige){
+				var check = true;
+				let val = plz.value.trim();
+				
+				if( val.length==5){
+					if(isNaN(parseInt(val))){
+						plz.style.border="2px solid red";
+						error_Anzeige.innerHTML="<h6 style='color:orange;font-weight:monospace;'><small>Geben Sie bitte eine gültige PLZ</small></h6>";
+						check=false;
+					}else{
+						plz.style.border="2px solid green";
+						error_Anzeige.innerText="";
+					    
+					}
+
+				}else{
+
+					plz.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:orange;font-weight:monospace;'><small>Geben Sie bitte eine gültige PLZ</small></h6>";
+					check=false;
+				}
+				return check;
+
+			}
+			email(email,error_Anzeige){
+				var check = true;
+				var em =email.value;
+				if(em.indexOf('@')<0){
+					check=false;
+					email.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:orange;font-weight:monospace;'><small>Geben Sie eine gültige Email</small></h6>";
+				}else{
+					email.style.border="2px solid green";
+					error_Anzeige.innerHTML="";
+				}
+
+
+			}
+			passwort(passwort,error_Anzeige){
+				let character_check = false;
+				let zahlen_check = false;
+				let zeichen = false;
+				let tab_zeichen = ['.',',','?',';',':','!',];
+				//Großbuchtaben Überprüfung
+				for (const wert of passwort.value) {
+					if(wert == wert.toUpperCase()){
+						character_check=true;
+						break;
+					}
+				}
+				// check auf Zahlen
+				for(const wert of passwort.value){
+						if(isNaN(wert)){
+							
+						}else{
+							zahlen_check=true;
+							break;
+						}
+				}
+				//check auf Zeichen
+				for(const wert of passwort.value){
+					for(const zeich of tab_zeichen){
+						if (wert==zeich){
+							zeichen= true;
+							break;
+						}
+					}
+				}
+
+
+				if(character_check==true && zeichen==true && zahlen_check == true && passwort.value.length>7) {
+					passwort.style.border="2px solid green";
+					error_Anzeige.innerHTML="";
+
+				}else{
+					passwort.style.border="2px solid red";
+					error_Anzeige.innerHTML="<h6 style='color:red;font-weight:monospace'><small>das Passwort muss mindesten 8 Zeichen haben ,Großbuchtaben ,zeichen,und Zahlen enthalten</small></h6>";
+				}
+					
+
+			}
+
+			pruef_all(){
+
+			}
+				
+				
+				
+
+		}
+
+		//Variable für die Fehlerbehandlung	(Sie werden den Klassemethoden übergeben)	
+		var check_name = document.getElementById('check_name');
+		var check_vorname = document.getElementById('check_vorname');
+		var check_geburtsdatum = document.getElementById('check_geburtsdatum');
+		var check_adresse = document.getElementById('check_adresse');
+		var check_plz = document.getElementById('check_plz');
+		var check_email = document.getElementById('check_email');
+		var check_passwort = document.getElementById('check_passwort');
+
+
+		//für die angabenverarbeitung
+		var verarb= new verarbeitung();
+
+		// alle diese werden von den Komponenten aufgerufen(also input ...)
+		function Leange(element,Leange,error_Anzeige){
+		
+		verarb.leange(element,Leange,error_Anzeige);
+		}
+		function Date(element,error_Anzeige){
+			verarb.geburtstag(element,error_Anzeige);
+		}
+
+		function adresse(element,error_Anzeige){
+			verarb.adresse(element,error_Anzeige);
+		}
+		function plz(element,error_Anzeige){
+			verarb.plz(element,error_Anzeige);
+		}
+		function email(element,error_Anzeige){
+			verarb.email(element,error_Anzeige);
+		}
+
+		function passwort(element,error_Anzeige){
+			verarb.passwort(element,error_Anzeige,null);
+		}
+
+
+//Überprüfung des eingegebenen Passwort mit Vue
+
+new Vue({
+	el:'#cont_3',
+	data:{
+		input_wert:"",
+		GB:"",
+		Zahl:"",
+		Zeichen:""
+	
+	} 
+	,
+	methods:{
+		check_input : function(){
+
+                                let tab_zeichen = ['.',',','?',';',':','!',];
+                                //Großbuchtaben Überprüfung
+                                for (const wert of this.input_wert) {
+                                        if(wert == wert.toUpperCase()){
+                                                 this.GB="Großbuchstabe OK";
+
+                                                break;
+                                        }else{
+						this.GB="";
+					}
+                                }
+                                // check auf Zahlen
+                                for(const wert of this.input_wert){
+                                                if(isNaN(wert)){
+							this.Zahl="";
+                                                }else{
+                                                        this.Zahl="Zahl OK";
+
+                                                        break;
+                                                }
+                                }
+
+
+
+
+				 //check auf Zeichen
+                                for(const wert of this.input_wert){
+                                        for(const zeich of tab_zeichen){
+                                                if (wert==zeich){
+                                                        this.Zeichen="Sonderzeichen OK";
+                                                        break;
+                                                }else{
+							this.Zeichen="";
+						}
+                                        }
+                                }
+
+
+
+		}
+	}
+
+});
+
+
+
+//Bereich für PHPverwendung
+
+
+  document.getElementById("Submitt").addEventListener('click',function(event){
+                event.preventDefault();
+
+                var name = document.getElementsByName("name")[0].value;
+                var vorname = document.getElementsByName("vorname")[0].value;
+                var date = document.getElementsByName("date")[0].value;
+                var adresse = document.getElementsByName("adresse")[0].value;
+                var plz = document.getElementsByName("plz")[0].value;
+                var email = document.getElementsByName("email")[0].value;
+                var passwort = document.getElementsByName("passwort")[0].value;
+
+                var forma = new FormData();
+                forma.append("name",name);
+                forma.append("vorname",vorname);
+                forma.append("date",date);
+                forma.append("adresse",adresse);
+                forma.append("plz",plz);
+                forma.append("email",email);
+                forma.append("passwort",passwort);
+                var xml = new XMLHttpRequest();
+                xml.onreadystatechange = function(){
+                        if(this.readyState==4 && this.status==200){
+                                alert(this.responseText);
+                                 document.getElementById("check_all").innerHTML="<h3 style='color:green;font-family:monospace;'>"+this.responseText+"</h3>";
+
+
+                        }
+
+                }
+               xml.open("POST","./speichern.php");
+                xml.send(forma);
+
+
+
+});
+
+
+
+
+	</script>
+</body>
+</html>
